@@ -1,13 +1,22 @@
+/*mein erstes Stylsheet */
 <style>
 		h1 {text-align:center;
 			front-size:180px;
 			font-family : serif;
 		}
 		h2{
-			color: green
+			color: green;
 			}
 		body{
 			font-family : sans-serif;
 		
+		}
+		.wichtig{
+			font-size:30px;
+			color: red;
+			font-weight:bold;
+		}
+		#abbildung1{
+			background-color: lime;
 		}
 		</style>
