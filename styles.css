@@ -1,3 +1,4 @@
+
 /*mein erstes Stylsheet */
 <style>
 		h1 {text-align:center;
@@ -5,10 +6,11 @@
 			font-family : serif;
 		}
 		h2{
-			color: green;
+			color: #6495ED;
 			}
 		body{
 			font-family : sans-serif;
+			background-color: yellow;
 		
 		}
 		.wichtig{
@@ -19,4 +21,21 @@
 		#abbildung1{
 			background-color: lime;
 		}
-		</style>
+		a {
+			text-decoration: none;
+			color: #3D59AB;
+			font-family: Arial, sans-serif;}
+		div {
+			border-radius: 50px;
+			border: 4px dashed #6495ED;
+			background-color: #BCD2EE;
+			height: 100px;
+			width: 160px;
+			margin: auto;
+			text-align: center;
+			}
+		div a{text-decoration: none; color:green;font-family: Vivaldi, cursive;}
+		
+		.li {font-size:12px; font-family: Arial;}
+		#red{color:red;}
+</style>
