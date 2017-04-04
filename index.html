@@ -1,68 +1,97 @@
-    	<meta charset="UTF-8">
-    		<title>Greifvögel</title>
-    		<link rel="stylesheet" href=styles.css></link>
-    	</head>
-    	<body>
-    		
-    		<h1 style="">Greifvogel</h1>
-    			<p> Der Greifvogel <em>(Accipitriformes)</em> gehört zur Ordnung der fleischfressenden Vögel und wird daher,<br /> auch Raubvogel genannt.↩
-    		
-    			</p>
-    	
-    			<strong>Steinadler</strong><br />
-    			<figure>
-    			<img src="images/steinadlerlegal.jpg" alt="Steinadler">
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Neuseeland Reise - Etappe 16 (Pancake rocks)</title>
+    <link rel="stylesheet" href="../styles.css" />
+	
+	 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
+	 <!--leaftlet hinzufügen-->
+	 
+	 <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+	 <!-- leaflet bezieht sich nun hierauf-->
+		<style>
+        
+			#map {
+            float:right;
+            width: 200px;
+            height: 200px;
+            border: 1px; solid blue;
+			}
+		
+		</style>
+</head>
+<body>
+	<h1>Pancake rocks</h1>
+	<h2>Lust auf Wasserfontänen die aus Felsformationen in die Höhe schießen?</h2>
+	<h3> 42° 7′ 7″ S, 171° 19′ 37″ O; 358 m Seehöhe</h3>
+	
+	<div id="map"></div>
+	
+		<p class="info">Die Pancake Rocks sind eine Felsformation im Paparoa-Nationalpark auf der Südinsel Neuseelands etwa 40 Kilometer nördlich von Greymouth.
+		</p>
+		<p class="info">Direkt an der Tasmansee gelegen, sehen die Felsen aus wie übereinander geschichtete Eierkuchen, wodurch sie zu ihrem Namen kamen.
+		</p>
+
+		<figure role="group">
+    			<img src="1280px-PancakeRocks_MC.jpg" alt="Pancake Rocks">
     			<figcaption>
-    			<a href="http://www.geo.de/geolino/tierlexikon/1716-rtkl-tierlexikon-steinadler">Steinadler
-    			</a>
+    			<a href="https://de.wikipedia.org/wiki/Pancake_Rocks">Pancake Rocks
+				</a>
     			</figcaption>
-    			</figure>
-    	
-    <ul>
-    		<li class="special">Größe: 92 cm</li>
-    		<li class="special">Gewicht: 6500g</li>
-    		<li class="special">Flügelspannweite: 220 cm</li>
-    		<li class="special">Eier: 2-3</li>
-    		<li class="special">Brutdauer: 42 Tage</li>
-    		<li class="special">Nesthocker: 70 Tage</li>
-    		<li class="special">Nahrung 
-    
-    		<ul class="special"><li>Säugetiere bis 12kg</li><li>Vögel</li>
-			</ul>
-    
-    		<li class="special">Lebenserwartung 35 Jahre</li>
-    		<li class="special">Zugvogel: Ja</li>
-    		<li id="red">Rote Liste: Ja</li></ul>
-    
-    	<p>
+		</figure>	
+		<figure role="group">
+				<img src="punakaiki-blaslandoumlcher.jpg" alt="Pancake Rocks">
+    			<figcaption>
+    			<a href="http://www.newzealand.com/de/punakaiki/">Pancake Rocks
+				</a>
+    			</figcaption>
+		</figure>
 		<p></p>
-    	
-    		<strong>Seeadler</strong><br/>
-    		<img src="images/seeadler.jpg" alt="Seeadler">
-    		<a href="http://www.wwf.at/de/seeadler/">Seeadler</a>
-    
-    			
-    		<ul>
-    			<li style="font-size:12px">Größe: 95 cm</li>
-    			<li style="font-size:12px">Gewicht: 7000</li>
-    			<li style="font-size:12px">Flügelspannweite: 250 cm</li>
-    			<li style="font-size:12px">Eier: 1-3</li>
-    			<li style="font-size:12px">Brutdauer: 38 Tage</li>
-    			<li style="font-size:12px">Nesthocker: 75-85 Tage</li>
-    			<li style="font-size:12px">Nahrung 
-    
-    			<ul style="font-size:12px"><li>Fische</li><li style="font-size:12px">Wasservögel</li><li style="font-size:12px">Säugetiere</li>
+			<h4 class="links">Quellen</h4>
+			<ul class="links">
+				<li><a href="ttp://www.newzealand.com/de/punakaiki/">ttp://www.newzealand.com/de/punakaiki/"</a></li>
+				<li><a href="https://de.wikipedia.org/wiki/Pancake_Rocks">https://de.wikipedia.org/wiki/Pancake_Rocks</a></li>
 			</ul>
-    
-    			<li style="font-size:12px">Lebenserwartung: 35 Jahre</li>
-    			<li style="font-size:12px">Zugvogel: Ja (Russland) / Deutschland Standvogel</li>
-    		</ul>
-    	
-    	<p>
-    	<div>
-    		<a href="http://www.wwf.at/de/seeadler-video/">Unterstütz die Arterhaltung! <span>WWF!</span></a>↩
-    	</div>	
-    	
-    
-    	</body>
-    </html>
+
+		
+	 <nav>
+		<a class="previous" href="../15/index.html"> Etappe 15</a>
+		<span class="current">Pancake Rocks</span>
+	
+		<a class="next" href="../17/index.html"> Etappe 17</a>
+	</nav>
+
+	<p class="author">Tabea <a href="https://github.com/Tabesen/tabesen.github.io">"https://github.com/Tabesen/tabesen.github.io</a></p> 
+	<!-- Weg um Karte einzufügen aus der VL
+	<script>
+	
+	var map = L.map('overviewMap');
+	map.setView([-42.118611, 171.326944],9);
+	
+	var osm = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png');
+	//z ist zoomfaktio [hier 9], x ist longitue, y ist lattitude
+	osm.addTo(map);
+	var marker = L.marker([-42.118611, 171.326944]);
+	marker.addTo(map);
+	
+	
+	</script> 
+	-->
+				
+	<script>
+
+ 
+		var map = L.map('map').setView([-42.118611, 171.326944], 10);
+		var marker = L.marker([-42.118611, 171.326944]).addTo(map);
+        
+		L.tileLayer( 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+		attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+		subdomains: ['a','b','c']
+		}).addTo( map );
+        
+        
+		marker.bindPopup("Neuseeland Reise - Etappe 16 (Pancake rocks)")
+</script>
+</body>
+</html>
