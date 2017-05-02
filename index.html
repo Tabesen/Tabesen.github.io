@@ -1,97 +1,230 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="UTF-8">
-    <title>Neuseeland Reise - Etappe 16 (Pancake rocks)</title>
-    <link rel="stylesheet" href="../styles.css" />
-	
-	 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
-	 <!--leaftlet hinzufügen-->
-	 
-	 <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
-	 <!-- leaflet bezieht sich nun hierauf-->
-		<style>
-        
-			#map {
-            float:right;
-            width: 200px;
-            height: 200px;
-            border: 1px; solid blue;
-			}
-		
-		</style>
+    <title>Stadtspaziergang Wien</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+
+    <!-- GeoJSON Datenskripts -->
+    <script src="stadtspaziergang_punkte.json.js"></script>
+    <script src="citybike_punkte.json.js"></script>
+    <script src="wanderwege_linien.json.js"></script>
+    <script src="maerkte_flaechen.json.js"></script>
+    <!--  erledigt TODO: GeoJSON Datenskript für Märkte/Flächen einbinden - https://www.data.gv.at/suche/?search-term=wien+m%C3%A4rkte&searchIn=catalog -->
+
+    <style>
+        h1 {
+            text-align: center;
+        }
+
+        #wienMap {
+            width: 900px;
+            height: 600px;
+            border: 1px solid black;
+            margin: auto;
+        }
+    </style>
 </head>
+
 <body>
-	<h1>Pancake rocks</h1>
-	<h2>Lust auf Wasserfontänen die aus Felsformationen in die Höhe schießen?</h2>
-	<h3> 42° 7′ 7″ S, 171° 19′ 37″ O; 358 m Seehöhe</h3>
-	
-	<div id="map"></div>
-	
-		<p class="info">Die Pancake Rocks sind eine Felsformation im Paparoa-Nationalpark auf der Südinsel Neuseelands etwa 40 Kilometer nördlich von Greymouth.
-		</p>
-		<p class="info">Direkt an der Tasmansee gelegen, sehen die Felsen aus wie übereinander geschichtete Eierkuchen, wodurch sie zu ihrem Namen kamen.
-		</p>
+    <h1>Stadtspaziergang Wien</h1>
 
-		<figure role="group">
-    			<img src="1280px-PancakeRocks_MC.jpg" alt="Pancake Rocks">
-    			<figcaption>
-    			<a href="https://de.wikipedia.org/wiki/Pancake_Rocks">Pancake Rocks
-				</a>
-    			</figcaption>
-		</figure>	
-		<figure role="group">
-				<img src="punakaiki-blaslandoumlcher.jpg" alt="Pancake Rocks">
-    			<figcaption>
-    			<a href="http://www.newzealand.com/de/punakaiki/">Pancake Rocks
-				</a>
-    			</figcaption>
-		</figure>
-		<p></p>
-			<h4 class="links">Quellen</h4>
-			<ul class="links">
-				<li><a href="ttp://www.newzealand.com/de/punakaiki/">ttp://www.newzealand.com/de/punakaiki/"</a></li>
-				<li><a href="https://de.wikipedia.org/wiki/Pancake_Rocks">https://de.wikipedia.org/wiki/Pancake_Rocks</a></li>
-			</ul>
+    <div id="wienMap"></div>
+    <h3>Quelle Geodaten</h3>
+    <p>
+        Stadt Wien – <a href="http://data.wien.gv.at/">data.wien.gv.at</a><br>
+        <a href="">Web Feature Service (WFS) - Wien</a><br> CC BY 3.0 Österreich<br>
+    </p>
 
+    <script>
+        // WMTS-Layer definieren - Quelle: http://www.basemap.at/wmts/1.0.0/WMTSCapabilities.xml
+        // erledigt TODO: WMTS-Layer Wien, Luftbild 1956 hinzufügen - Quelle: http://maps.wien.gv.at/wmts/1.0.0/WMTSCapabilities.xml (nach lb1956 suchen und dann wie bei basemap.at die ResourceURL anpassen, Datenquelle: Stadt Wien – data.wien.gv.at)
+        var layers = {
+
+            luftbild1956: L.tileLayer("http://{s}.wien.gv.at/wmts/lb1956/grau/google3857/{z}/{y}/{x}.jpeg", {
+                subdomains: ['maps', 'maps1', 'maps2', 'maps3', 'maps4'],
+                attribution: 'Datenquelle: <a href="data.wien.gv.at">Stadt Wien – data.wien.gv.at</a>'
+            }),
+            geolandbasemap: L.tileLayer("https://{s}.wien.gv.at/basemap/geolandbasemap/normal/google3857/{z}/{y}/{x}.png", {
+                subdomains: ['maps', 'maps1', 'maps2', 'maps3', 'maps4'],
+                attribution: 'Datenquelle: <a href="http://www.basemap.at/">basemap.at</a>'
+            }),
+            bmapgrau: L.tileLayer("https://{s}.wien.gv.at/basemap/bmapgrau/normal/google3857/{z}/{y}/{x}.png", {
+                subdomains: ['maps', 'maps1', 'maps2', 'maps3', 'maps4'],
+                attribution: 'Datenquelle: <a href="http://www.basemap.at/">basemap.at</a>'
+            }),
+            bmapoverlay: L.tileLayer("https://{s}.wien.gv.at/basemap/bmapoverlay/normal/google3857/{z}/{y}/{x}.png", {
+                subdomains: ['maps', 'maps1', 'maps2', 'maps3', 'maps4'],
+                attribution: 'Datenquelle: <a href="http://www.basemap.at/">basemap.at</a>'
+            }),
+            bmaphidpi: L.tileLayer("https://{s}.wien.gv.at/basemap/bmaphidpi/normal/google3857/{z}/{y}/{x}.jpeg", {
+                subdomains: ['maps', 'maps1', 'maps2', 'maps3', 'maps4'],
+                attribution: 'Datenquelle: <a href="http://www.basemap.at/">basemap.at</a>'
+            }),
+            bmaporthofoto30cm: L.tileLayer("https://{s}.wien.gv.at/basemap/bmaporthofoto30cm/normal/google3857/{z}/{y}/{x}.jpeg", {
+                subdomains: ['maps', 'maps1', 'maps2', 'maps3', 'maps4'],
+                attribution: 'Datenquelle: <a href="http://www.basemap.at/">basemap.at</a>'
+            }),
+            osm: L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                subdomains: ['a', 'b', 'c'],
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            })
+        };
+
+        // Karte definieren und Ausschnitt setzen
+        var map = L.map('wienMap', {
+            layers: [layers.bmapgrau],
+            center: [48.20833, 16.373064],
+            zoom: 12
+        });
+
+        // Maßstab hinzufügen
+        L.control.scale({
+            maxWidth: 200,
+            metric: true,
+            imperial: false
+        }).addTo(map);
+
+        // GeoJSON Daten des Stadtspaziergangs laden und farbige Marker nach Kategorie mit Popup erstellen
+        var iconByCategory = {
+            1: "https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png",
+            2: "https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png",
+            3: "https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png",
+            4: "https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-orange.png",
+            5: "https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-yellow.png",
+            6: "https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-violet.png"
+        };
+        var punkteSpaziergang = L.geoJSON(window.spaziergangPunkte, {
+            pointToLayer: function(feature, latlng) {
+                return L.marker(latlng, {
+                    icon: L.icon({
+                        iconSize: [25, 41],
+                        iconAnchor: [12, 41],
+                        popupAnchor: [1, -34],
+                        shadowSize: [41, 41],
+                        shadowUrl: 'https://unpkg.com/leaflet@1.0.3/dist/images/marker-shadow.png',
+                        iconUrl: iconByCategory[feature.properties.KATEGORIE]
+                    })
+                });
+            }
+        }).bindPopup(function(layer) {
+            // erledigt TODO: HTML-Popupfenster mit BEMERKUNG, OBJECTID, KATEGORIE, ADRESSE, WEITERE_INF (als Link)
+
+            var spazierweg = '<h3>' + "Bemerkung: " + layer.feature.properties.BEMERKUNG + '<br>' + "ObjektID: "+ layer.feature.properties.OBJECTID + '</br>' + '<br>' + "Kategorie: "+ layer.feature.properties.KATEGORIE + '</br>'+ '<br>'  +"Adresse: "+ layer.feature.properties.ADRESSE + '</br>' + '</h3>';
+            spazierweg += '<a href="' + layer.feature.properties.WEITERE_INF + '">Infos</a>';
+
+
+            return spazierweg;
+            //layer.feature.properties.NAME;
+        }).addTo(map);
+
+        // GeoJSON Daten der Citybike Stationen laden und Popup erstellen
+        var punkteCitybike = L.geoJSON(window.citybikePunkte, {
+            // erledigt ?TODO: Citybike Marker als Icons implementieren (https://www.data.gv.at/katalog/dataset/770f9237-9a7f-45e4-9647-aacf35ddee06)
+
+
+            pointToLayer: function(feature, latlng) {
+                return L.marker(latlng, {
+                    icon: L.icon({
+                        iconSize: [25, 25],
+                        iconAnchor: [12, 41],
+                        popupAnchor: [1, -34],
+                        shadowSize: [41, 41],
+                        shadowUrl: 'https://unpkg.com/leaflet@1.0.3/dist/images/marker-shadow.png',
+                        iconUrl: "http://www.data.wien.gv.at/icons/citybike.png"
+                    })
+                });
+            }
+        }).bindPopup(function(layer) {
+            // erledigt TODO: HTML-Popupfenster mit STATION und BEZIRK
+
+            var biken = '<h3>' + layer.feature.properties.STATION + '</h3>';
+
+            biken += '<p>' + "Bezirk: " + layer.feature.properties.BEZIRK + '</p>';
+
+            return biken;
+
+
+        }).addTo(map);
+
+        // GeoJSON Daten der Wanderwege laden, nach Typ einfärben und Popup erstellen
+        var linienWanderwege = L.geoJSON(window.wanderwegeLinien, {
+            style: function(feature) {
+                var farbe = "";
+                if (feature.properties.TYP == "1") {
+                    farbe = "red";
+                } else {
+                    farbe = "orange";
+                }
+                return {
+                    color: farbe
+                };
+            }
+        }).bindPopup(function(layer) {
+            var tipp = '<h3>' + layer.feature.properties.BEZ_TEXT + '</h3>';
+            tipp += '<a href="' + layer.feature.properties.URL_INFO + '">Infos</a>';
+            return tipp;
+        }).addTo(map);
+
+        // GeoJSON Daten der Märkte hinzufügen - https://www.data.gv.at/suche/?search-term=wien+m%C3%A4rkte&searchIn=catalog
+        // erledigt TODO: Flächen nach property INFOS_NACHHALTIG einfärben
+
+
+        var maerkt = L.geoJSON(window.maerkteFlaechen, {
+            style: function(feature) {
+                var farbe1 = "";
+                if (feature.properties.INFOS_NACHHALTIG == "Produzentenmarkt") {
+                    farbe1 = "green";
+                } else {
+                    farbe1 = "purple";
+                }
+                return {
+                    color: farbe1
+                };
+            }
+
+
+            // erledigt TODO: HTML-Popupfenster mit NAME, MARKTKATEGORIE, INFOS_NACHHALTIG, URL_MARKTAMT (als Link)
+
+        }).bindPopup(function(layer) {
+            var flaeche = '<h3>' + layer.feature.properties.NAME + '</h3>';
+            flaeche += '<p>' + layer.feature.properties.MARKTKATEGORIE + '</p>';
+            flaeche += '<p>' + layer.feature.properties.INFOS_NACHHALTIG + '</p>';
+            flaeche += '<a href="' + layer.feature.properties.URL_MARKTAMT + '">Infos</a>';
+
+            return flaeche;
+        }).addTo(map);
+
+        // WMTS-Layer Auswahl und Marker Auswahl Overlay hinzufügen
+        // erledigt TODO: WMTS-Layer Wien, Luftbild 1956 zur Hintergrundlayerauswahl hinzufügen
+        // erledigt TODO: GeoJSON Layer Märkte ein/aus Overlay hinzufügen
+        L.control.layers({
+            "basemap.at - STANDARD": layers.geolandbasemap,
+            "basemap.at - GRAU": layers.bmapgrau,
+            "basemap.at - OVERLAY": layers.bmapoverlay,
+            "basemap.at - HIGH-DPI": layers.bmaphidpi,
+            "basemap.at - ORTHOFOTO": layers.bmaporthofoto30cm,
+            "OpenStreetMap": layers.osm,
+            "Luftbild 1956": layers.luftbild1956
+        }, {
+            "Stadtspaziergang Stationen": punkteSpaziergang,
+            "Citybike Standorte": punkteCitybike,
+            "Wandern in und um Wien": linienWanderwege,
+            "Märkte": maerkt
+
+        }).addTo(map)
+
+        // Ausschnitt setzen
+		// erledigt TODO: Ausschnitt auf Stationen des Stadtpaziergangs setzen
 		
-	 <nav>
-		<a class="previous" href="../15/index.html"> Etappe 15</a>
-		<span class="current">Pancake Rocks</span>
-	
-		<a class="next" href="../17/index.html"> Etappe 17</a>
-	</nav>
+		var bounds = (punkteSpaziergang.getBounds()); 
+		map.fitBounds(bounds); 
+		
+    </script>
 
-	<p class="author">Tabea <a href="https://github.com/Tabesen/tabesen.github.io">"https://github.com/Tabesen/tabesen.github.io</a></p> 
-	<!-- Weg um Karte einzufügen aus der VL
-	<script>
-	
-	var map = L.map('overviewMap');
-	map.setView([-42.118611, 171.326944],9);
-	
-	var osm = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png');
-	//z ist zoomfaktio [hier 9], x ist longitue, y ist lattitude
-	osm.addTo(map);
-	var marker = L.marker([-42.118611, 171.326944]);
-	marker.addTo(map);
-	
-	
-	</script> 
-	-->
-				
-	<script>
-
- 
-		var map = L.map('map').setView([-42.118611, 171.326944], 10);
-		var marker = L.marker([-42.118611, 171.326944]).addTo(map);
-        
-		L.tileLayer( 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-		attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-		subdomains: ['a','b','c']
-		}).addTo( map );
-        
-        
-		marker.bindPopup("Neuseeland Reise - Etappe 16 (Pancake rocks)")
-</script>
 </body>
+
 </html>
