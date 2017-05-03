@@ -3,6 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>Stadtspaziergang Wien</title>
 
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
@@ -16,21 +17,31 @@
     <!--  erledigt TODO: GeoJSON Datenskript für Märkte/Flächen einbinden - https://www.data.gv.at/suche/?search-term=wien+m%C3%A4rkte&searchIn=catalog -->
 
     <style>
+		body {
+			padding: 0;
+			margin: 0;
+			}
+		html, body, #wienMap {
+			height: 100vh;
+			width: 100vw;
+		}
+	
         h1 {
             text-align: center;
         }
-
+	/*
         #wienMap {
             width: 900px;
             height: 600px;
             border: 1px solid black;
             margin: auto;
-        }
+    */}
+	
     </style>
 </head>
 
 <body>
-    <h1>Stadtspaziergang Wien</h1>
+    <!--<h1>Stadtspaziergang Wien</h1>-->
 
     <div id="wienMap"></div>
     <h3>Quelle Geodaten</h3>
@@ -38,7 +49,8 @@
         Stadt Wien – <a href="http://data.wien.gv.at/">data.wien.gv.at</a><br>
         <a href="">Web Feature Service (WFS) - Wien</a><br> CC BY 3.0 Österreich<br>
     </p>
-
+	
+			
     <script>
         // WMTS-Layer definieren - Quelle: http://www.basemap.at/wmts/1.0.0/WMTSCapabilities.xml
         // erledigt TODO: WMTS-Layer Wien, Luftbild 1956 hinzufügen - Quelle: http://maps.wien.gv.at/wmts/1.0.0/WMTSCapabilities.xml (nach lb1956 suchen und dann wie bei basemap.at die ResourceURL anpassen, Datenquelle: Stadt Wien – data.wien.gv.at)
@@ -113,7 +125,7 @@
         }).bindPopup(function(layer) {
             // erledigt TODO: HTML-Popupfenster mit BEMERKUNG, OBJECTID, KATEGORIE, ADRESSE, WEITERE_INF (als Link)
 
-            var spazierweg = '<h3>' + "Bemerkung: " + layer.feature.properties.BEMERKUNG + '<br>' + "ObjektID: "+ layer.feature.properties.OBJECTID + '</br>' + '<br>' + "Kategorie: "+ layer.feature.properties.KATEGORIE + '</br>'+ '<br>'  +"Adresse: "+ layer.feature.properties.ADRESSE + '</br>' + '</h3>';
+            var spazierweg = '<h3>' + "Bemerkung: " + layer.feature.properties.BEMERKUNG + '<br>' + "ObjektID: " + layer.feature.properties.OBJECTID + '</br>' + '<br>' + "Kategorie: " + layer.feature.properties.KATEGORIE + '</br>' + '<br>' + "Adresse: " + layer.feature.properties.ADRESSE + '</br>' + '</h3>';
             spazierweg += '<a href="' + layer.feature.properties.WEITERE_INF + '">Infos</a>';
 
 
@@ -178,13 +190,29 @@
                 var farbe1 = "";
                 if (feature.properties.INFOS_NACHHALTIG == "Produzentenmarkt") {
                     farbe1 = "green";
-                } else {
-                    farbe1 = "purple";
+                }
+                if (feature.properties.INFOS_NACHHALTIG == "Produzentenmarkt, Bio-Eck") {
+                    farbe1 = "blue";
+                }
+                if (feature.properties.INFOS_NACHHALTIG == "-") {
+                    farbe1 = "yellow";
                 }
                 return {
                     color: farbe1
                 };
             }
+
+
+
+
+            //oder so aber dann unterscheide ich nicht zwischen drei Gruppen sondern unterteile nur in entweder oder 
+            //} else {
+            // farbe1 = "blue";
+            // }
+            //return {
+            // color: farbe1
+            // };
+            // }
 
 
             // erledigt TODO: HTML-Popupfenster mit NAME, MARKTKATEGORIE, INFOS_NACHHALTIG, URL_MARKTAMT (als Link)
@@ -193,7 +221,6 @@
             var flaeche = '<h3>' + layer.feature.properties.NAME + '</h3>';
             flaeche += '<p>' + layer.feature.properties.MARKTKATEGORIE + '</p>';
             flaeche += '<p>' + layer.feature.properties.INFOS_NACHHALTIG + '</p>';
-            flaeche += '<a href="' + layer.feature.properties.URL_MARKTAMT + '">Infos</a>';
 
             return flaeche;
         }).addTo(map);
@@ -218,11 +245,11 @@
         }).addTo(map)
 
         // Ausschnitt setzen
-		// erledigt TODO: Ausschnitt auf Stationen des Stadtpaziergangs setzen
-		
-		var bounds = (punkteSpaziergang.getBounds()); 
-		map.fitBounds(bounds); 
-		
+        // erledigt TODO: Ausschnitt auf Stationen des Stadtpaziergangs setzen
+
+       //var bounds = (punkteSpaziergang.getBounds());
+        //map.fitBounds(bounds);
+		map.locate({setView: true, maxZoom: 16});
     </script>
 
 </body>
