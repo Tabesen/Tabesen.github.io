@@ -28,7 +28,10 @@
 </head>
 
 <body>
-    <div id="map"></div>
+	<h1>Adlerweg-Etappe 2: Gaudeamushütte – Hintersteiner See</h1>
+    <p >Diese Etappe führt ausgehend von der Gaudeamushütte über den Klammlweg zu einem besonderem Ziel entlang des Adlerwegs: dem Hintersteiner See. Der Bergsee lockt vor allem im Hochsommer mit Badefreuden.</p>
+	<div id="map"></div>
+<p ></p>
 
     <script>
         // WMTS-Layer basemap.at - Quelle: http://www.basemap.at/wmts/1.0.0/WMTSCapabilities.xml
@@ -98,7 +101,19 @@
 		L.geoJSON(window.etappe02,{
 			onEachFeature: el.addData.bind(el)
 			}).addTo(map);
+		// ??????var strecke= [
+			//L.marker([47.54985, 12.32467], {title: "Start", icon : L.icon({iconUrl: 'icons/start-race-2.png'}) }),
+			//L.marker([47.540944, 12.196715], {title: "Ende", icon : L.icon({iconUrl: 'icons/finish.png'}) })
+		//];	
+	
 		
+		
+		
+		
+		
+		
+		
+			
 		var huts= [
 			L.marker([47.554221, 12.311050], {title: "Gaudeamushütte", icon : L.icon({iconUrl: 'icons/hut.png'}) }),
 			L.marker([47.553584, 12.311146], {title: "Gruttenhütte", icon : L.icon({iconUrl: 'icons/hut.png'}) }),
