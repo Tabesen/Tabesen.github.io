@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 
-    <title>basemap.at mit leaflet-hash Plugin</title>
+    <title>Adlerweg-Etappe 2: Gaudeamushütte – Hintersteiner See</title>
 
     <link rel="stylesheet" href="js/leaflet/leaflet.css" />
 	<link rel="stylesheet" href="js/leaflet-elevation/leaflet.elevation-0.0.4.css" />
@@ -14,8 +14,10 @@
 	<script src="data/adlerwegetappe02.js"></script>
 	<script src="js/leaflet-elevation/leaflet.elevation-0.0.4.min.js"></script>
 	<script src="https://d3js.org/d3.v3.min.js"></script>
-	<script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.2.0/leaflet-omnivore.min.js'></script>
-    <style>
+	
+	<script src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.2.0/leaflet-omnivore.min.js'></script>
+    
+	<style>
         body {
             padding: 0px;
             margin: 0px;
@@ -24,6 +26,11 @@
             height: 100vh;
             width: 100vw;
         }
+			#map {
+			width: 1024px;
+			height:600px;
+			border:1px solid black
+		}
     </style>
 </head>
 
@@ -31,7 +38,9 @@
 	<h1>Adlerweg-Etappe 2: Gaudeamushütte – Hintersteiner See</h1>
     <p >Diese Etappe führt ausgehend von der Gaudeamushütte über den Klammlweg zu einem besonderem Ziel entlang des Adlerwegs: dem Hintersteiner See. Der Bergsee lockt vor allem im Hochsommer mit Badefreuden.</p>
 	<div id="map"></div>
-<p ></p>
+	<p class= "author">Weitere Infos: Adlerwege-Etappe 2 Gaudeamushütte – Hintersteiner See<a href = "http://www.tirol.at/reisefuehrer/sport/wandern/wandertouren/a-adlerweg-etappe-2-gaudeamushuette-hintersteiner-see"> hier<a/a>
+	<p class= "author"> Autorin: Tabea Hengst <a href= "später index.html link zu githubseite"> </a></p>
+
 
     <script>
         // WMTS-Layer basemap.at - Quelle: http://www.basemap.at/wmts/1.0.0/WMTSCapabilities.xml
@@ -91,49 +100,167 @@
         // leaflet-hash aktivieren
         var hash = new L.Hash(map);
 		
-		L.geoJSON(window.etappe02).addTo(map);
+		//L.geoJSON(window.etappe02).addTo(map); //oder mit omnivore erfüllt gleiche funktion
 		//omnivore.gpx('data/adlerwegeetappe02').addTo(map);
 		
-		//Höhenprofil in karte rechts oben und mann muss omivor von oben wieder auskommentieren 
-		var el = L.control.elevation();
-		el.addTo(map);
+		//laden des gpxTracks 
+		gpxTrack= omnivore.gpx('data/adlerwegEtappe02.gpx').addTo(map);
+		
+		var markup= '<h3> Adlerweg-Etappe 2: Gaudeamushütte- Hintersteiner See</h3>';
+		gpxTrack.bindPopup(markup,{maxWidth: 450});
+		
+		//"elevation" öffnet hier das Diagrammfenster benötigt aber  L.geoJSON (window.etappe02...each festure...) um Diagrammfläche zu füllen
+		var profile= L.control.elevation({
+		position: 'bottomright' 
+		});
+		profile.addTo(map);		
 		
 		L.geoJSON(window.etappe02,{
-			onEachFeature: el.addData.bind(el)
+			onEachFeature: profile.addData.bind(profile)
 			}).addTo(map);
-		// ??????var strecke= [
-			//L.marker([47.54985, 12.32467], {title: "Start", icon : L.icon({iconUrl: 'icons/start-race-2.png'}) }),
-			//L.marker([47.540944, 12.196715], {title: "Ende", icon : L.icon({iconUrl: 'icons/finish.png'}) })
-		//];	
-	
-		
-		
-		
-		
-		
-		
-		
 			
-		var huts= [
-			L.marker([47.554221, 12.311050], {title: "Gaudeamushütte", icon : L.icon({iconUrl: 'icons/hut.png'}) }),
-			L.marker([47.553584, 12.311146], {title: "Gruttenhütte", icon : L.icon({iconUrl: 'icons/hut.png'}) }),
-			L.marker([47.543455, 12.276038], {title: "Seestüberl", icon : L.icon({iconUrl: 'icons/hut.png'}) }),
-			L.marker([47.540944, 12.196715], {title: "Pension Maier", icon : L.icon({iconUrl: 'icons/hut.png'}) })
+		var restaurant= [
+			L.marker([47.549167, 12.324722], {title: "Gaudeamushütte", icon : L.icon({iconUrl: 'icons/restaurant.png'}) }),
+			L.marker([47.553584, 12.311146], {title: "Gruttenhütte", icon : L.icon({iconUrl: 'icons/restaurant.png'}) }),
+			L.marker([47.543298, 12.222692], {title: "Seestüberl", icon : L.icon({iconUrl: 'icons/restaurant.png'}) }),
+			L.marker([47.540944, 12.196768], {title: "Pension Maier", icon : L.icon({iconUrl: 'icons/restaurant.png'}) })
 		];
 		
-		var hutsLayer= L.featureGroup();
-		for (var i=0; i<huts.length; i++){
-			hutsLayer.addLayer(huts[i]);
+		var restaurantLayer= L.featureGroup();
+		for (var i=0; i<restaurant.length; i++){
+			restaurantLayer.addLayer(restaurant[i]);
 		}
-		//wenn Hüttensymbole erst bei einer bestimmten Zoomstufe auftauchen sollen in der karte
-		hutsLayer.addTo(map);
+		restaurantLayer.addTo(map);
+		
+		//wenn Restaurantsymbole erst bei einer bestimmten Zoomstufe auftauchen sollen in der karte
 		map.on("zoomend",function()  {
 			if (map.getZoom()>=15) {
-				map.addLayer(hutsLayer);
+				map.addLayer(restaurantLayer);
 			} else {
-				map.removeLayer(hutsLayer);
+				map.removeLayer(restaurantLayer);
 			}
 		});
+		
+		var start= [
+			L.marker([47.54923,12.32454], {title: "Start", icon : L.icon({iconUrl: 'icons/start.png'}) })
+			];
+		
+		var startLayer= L.featureGroup();
+		for (var i=0; i<start.length; i++){
+			startLayer.addLayer(start[i]);
+		}
+		startLayer.addTo(map);
+		
+		//wenn Startsymbole erst bei einer bestimmten Zoomstufe auftauchen sollen in der karte
+		map.on("zoomend",function()  {
+			if (map.getZoom()>=15) {
+				map.addLayer(startLayer);
+			} else {
+				map.removeLayer(startLayer);
+			}
+		});
+		
+		var ende= [
+			L.marker([47.54077,12.19680], {title: "Ende", icon : L.icon({iconUrl: 'icons/ende.png'}) })
+		];
+		
+		var endeLayer= L.featureGroup();
+		for (var i=0; i<ende.length; i++){
+			endeLayer.addLayer(ende[i]);
+		}
+		endeLayer.addTo(map);
+		
+		//wenn Restaurantsymbole erst bei einer bestimmten Zoomstufe auftauchen sollen in der karte
+		map.on("zoomend",function()  {
+			if (map.getZoom()>=15) {
+				map.addLayer(endeLayer);
+			} else {
+				map.removeLayer(endeLayer);
+			}
+		});
+		
+		var aussicht= [
+			L.marker([47.553564, 12.311135], {title: "Adlerblick", icon : L.icon({iconUrl: 'icons/aussicht.png'}) })
+			
+		];
+		
+		var aussichtLayer= L.featureGroup();
+		for (var i=0; i<aussicht.length; i++){
+			aussichtLayer.addLayer(aussicht[i]);
+		}
+		aussichtLayer.addTo(map);
+		
+		//wenn Aussichtsymbole erst bei einer bestimmten Zoomstufe auftauchen sollen in der karte
+		map.on("zoomend",function()  {
+			if (map.getZoom()>=15) {
+				map.addLayer(aussichtLayer);
+			} else {
+				map.removeLayer(aussichtLayer);
+			}
+		});
+		
+		
+	
+		//var startEndeLayer= L.featureGroup();
+		//for (var i=0; i<startEnde.length; i++){
+			//startEndeLayer.addLayer(startEnde[i]);
+		//}
+		//startEndeLayer.addTo(map);
+		//wenn Hüttensymbole erst bei einer bestimmten Zoomstufe auftauchen sollen in der karte
+		//map.on("zoomend",function()  {
+			//if (map.getZoom()>=15) {
+				//map.addLayer(startEndeLayer);
+			//} else {
+				//map.removeLayer(startEndeLayer);
+			//}
+		//});
+			//var startEnde= [
+			//L.marker([47.54985, 12.32467], {title: "Start", icon : L.icon({iconUrl: 'icons/start-race-2.png'}) }),
+			//L.marker([47.540944, 12.196715], {title: "Ende", icon : L.icon({iconUrl: 'icons/finish.png'}) })
+			//];	
+			
+		
+		 // Popup hinzufügen
+            var markup = '<h3>Adlerweg-Etappe 2: Gaudeamushütte – Hintersteiner See</h3>';
+            markup += '<p>Die zweite Etappe führt ausgehend von der Gaudeamushütte über den Klammlweg zu einem besonderem Ziel entlang des Adlerwegs: dem Hintersteiner See. Der Bergsee lockt vor allem im Hochsommer mit Badefreuden.</p>'
+            markup += '<li>Ausgangspunkt: Gaudeamushütte</li>';
+            markup += '<li>Endpunkt: Hintersteiner See</</li>';
+            markup += '<li>Höhenmeter bergauf: 800</li>';
+            markup += '<li>Höhenmeter bergab: 1130</li>';
+            markup += '<li>Höchster Punkt: 1630</li>';
+            markup += '<li>Schwierigkeitsgrad: mittelschwierig</li>';
+            markup += '<li>Streckenlänge (in km): 14,5</li>';
+            markup += '<li>Gehzeit (in Stunden): 6</li>';
+            markup += '<li>Einkehrmöglichkeiten: Gaudeamushütte,Gruttenhütte,Seestüberl,Pension Maier</li>';
+            markup += '<li><a http://www.tirol.at/reisefuehrer/sport/wandern/wandertouren/a-adlerweg-etappe-2-gaudeamushuette-hintersteiner-see">Weitere Informationen</a></li>';
+            gpxTrack.bindPopup(markup, { maxWidth : 450 });
+
+            // Ausschnitt setzen
+            // funktioniert nicht: map.fitBounds(gpxTrack.getBounds());
+			map.fitBounds([
+				[47.54069,12.19956],
+				[47.54934,12.32497]
+			]);
+
+            // Höhenprofil erzeugen
+            gpxTrack.eachLayer(function(layer) {
+                profileControl.addData(layer.feature);
+            });
+        
+
+	
+		
+			
+		
+		//Höhenprofil in karte rechts oben und mann muss omivor von oben wieder auskommentieren 
+		//var el = L.control.elevation();
+		//el.addTo(map);
+		
+		
+				
+				
+		
+		
     </script>
 
 </body>
