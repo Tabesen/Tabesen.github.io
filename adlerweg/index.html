@@ -242,16 +242,89 @@
 				[47.54069,12.19956],
 				[47.54934,12.32497]
 			]);
+			//gpxTrack.on("ready", function() { damit sage ich das omnivor warten soll auf gpx tracks...wichtig!
+			gpxTrack.on("ready", function() {
 
-            // Höhenprofil erzeugen
+          // Höhenprofil erzeugen
             gpxTrack.eachLayer(function(layer) {
-                profileControl.addData(layer.feature);
-            });
-        
+                //profileControl.addData(layer.feature);
+			
+           console.log("gpxTrack",gpxTrack);	
+           //GPX punkte anzeigen var pts= 
+		
+			console.log(layer.feature.geometry.coordinates)
+			var pts= layer.feature.geometry.coordinates;
+			
+			for(var i= 1;i<pts.length;i+=1){
+					console.log(pts[i]); //aktuelle Punkt
+					console.log(pts[i-1]); //vorhergehender Punkt (i+1 wäre der nächste Punkt zum Beispiel)
+					
+				//entfernung  bestimmen
+					var dist = map.distance (
+										[pts[i][1],pts[i][0] ],
+										[pts[i-1][1],pts[i-1][0] ]
+										).toFixed(0);
+										//console.log(dist);
+										
+										var delta = pts[i][2]- pts[i-1][2];
+										console.log(delta, "Höhenmeter auf",dist,"m Strecke");
+										
+										//Formle für die Berechnung der Steigung in Grad-> toFixed macht die Kommastelle um 1 (d.h. 4,5)
+										
+										var rad = Math.atan(delta/dist);
+										var deg= (rad* (180/Math.PI)).toFixed(1);
+										console.log(deg);
+										//colorbrewer
+										var farbe; 
+											//rosa http://colorbrewer2.org/#type=sequential&scheme=PuRd&n=6
+											//['#f1eef6','#d4b9da','#c994c7','#df65b0','#dd1c77','#980043']
+										
+										
+										//grün http://colorbrewer2.org/#type=sequential&scheme=GnBu&n=6
+										//['#f0f9e8','#ccebc5','#a8ddb5','#7bccc4','#43a2ca','#0868ac']
+										switch(true) { // checks if condition is true, not for certain values of a variable
+												case (deg >= 20) :  farbe = "#bd0026"; break;
+												case (deg >= 15) :  farbe = "#f03b20"; break;
+												case (deg >= 10) :  farbe = "#fd8d3c"; break;
+												case (deg >= 5) :  farbe = "#feb24c"; break;
+												case (deg >= 1) :  farbe = "#fed976"; break;
+												case (deg >= -1) :  farbe = "yellow"; break;
+												case (deg >= -5) :  farbe = "#d9f0a3"; break;
+												case (deg >=-10) :  farbe = "#addd8e"; break;
+												case (deg >=-15) :  farbe = "#78c679"; break;
+												case (deg >= -20) :  farbe = "#31a354"; break;
+												case (deg < -20) :  farbe = "#006837"; break;
+										}
+										console.log(deg,farbe);
+										
+									
+										
+										//Linien zeichnen
+										 var pointA = new L.LatLng(pts[i][1],pts[i][0] );
+											var pointB = new L.LatLng(pts[i-1][1],pts[i-1][0]);
+											var pointList = [pointA, pointB];
+									   
+											var firstpolyline = new L.Polyline(pointList, {
+											 color: farbe,
+											 weight: 6,
+											 opacity: 0.5,
+											 smoothFactor: 1
 
-	
+										});
+										
+										  firstpolyline.addTo(map);
+
+										
+										}
+										//console.log(dist); });
+        
 		
 			
+				
+			});
+	
+		
+			});
 		
 		//Höhenprofil in karte rechts oben und mann muss omivor von oben wieder auskommentieren 
 		//var el = L.control.elevation();
