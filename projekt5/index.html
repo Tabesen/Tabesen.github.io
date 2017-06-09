@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+    <title>Mountainbike-Touren in Tirol</title>
+
+    <link rel="stylesheet" href="js/leaflet/leaflet.css" />
+	<link rel="stylesheet" href="js/leaflet-elevation/leaflet.elevation-0.0.4.css" />
+    <script src="js/leaflet/leaflet.js"></script>
+    <script src="js/leaflet-hash/leaflet-hash.js"></script>
+	<script src="js/leaflet-elevation/leaflet.elevation-0.0.4.min.js"></script> 
+	<script src="https://d3js.org/d3.v3.min.js"></script>
+	<script src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.2.0/leaflet-omnivore.min.js'></script>
+	
+	<script src="bikedata/Guffertrunde.js"></script>
+	<script src="toureninfo.js"></script>
+	<script src="map.js"></script>
+	
+	
+
+    <style>
+        body {
+            padding: 0px;
+            margin: 0px;
+        }
+        html, body {
+            height: 100vh;
+            width: 100vw;
+		}	
+			#map {
+			width: 800px;
+			height: 500px;
+			border: 1px solid blue
+        }
+		
+		
+		
+		 
+    </style>
+</head>
+
+
+<body>
+
+
+
+<h1 id="Titel"></h1>
+<p id="Kurztext"></p>
+   <div id="map"></div>
+<p> </p>
+<select id="gpx">
+		<option value="Karwendel.gpx">Karwendel</option>
+		<option value="Pillersee.gpx">Pillersee</option>
+		<option value="MariaWaldrast.gpx">Maria Waldrast</option>
+		<option value="Kaiserwinkl.gpx">Kaiserwinkl</option>
+		<option value="HoheSalve.gpx">Hohe Salve</option>
+		<option value="Marienbergjoch.gpx">Marienbergjoch</option>
+		<option value="Guffertrunde.gpx">Guffertrunde</option>
+		<option value="VorderesOetztal.gpx">Vorderes Ötztal</option>
+   
+</select>   
+   
+    <h4>Art der Tour: </h4>
+   <div id="ArtderTour"></div>
+   
+   <h4>Tourenbeschreibung: </h4>
+   <div id="Tourenbeschreibung"></div>
+   <h4>Start</h4>
+   <div id="Start"></div>
+   
+	<h4>Ziel</h4>
+	<div id="Ziel"></div>
+	
+	<h4>Aufstieg</h4>
+	<div id="auf"></div>
+	
+	<h4>Abstieg</h4>
+	<div id="ab"></div>
+	
+	<h4>höchster Punkt</h4>
+	<div id="HoechsterPunkt"></div>
+	
+	<h4>Schwierigkeit</h4>
+	<div id="Schwierigkeit"></div>
+	
+	<h4>Länge in Kilometern</h4>
+	<div id="Laenge"></div>
+	
+	<h4>Dauer der Wanderung in Stunden</h4>
+	<div id="Zeit"></div>
+	
+	<h4>Parkplatz</h4>
+	<div id="Parkplatz"></div>
+	
+	<h4>Gebirgszug</h4>
+	<div id="Gebirgszug"></div>
+	
+	<h4>Einkehrmöglichkeiten </h4>
+	<div id="Einkehr"></div>
+	<div id="EinkehrHomepage"> <a href="EinkehrHomepage"></a></div>
+
+	<!--<div id="EinkehrHomepage"></div>-->
+	<div id="Einkehr1"></div>
+	<div id="Einkehr1Homepage"></div>
+	
+	
+	<h4>Lohnende Stopps</h4>
+	<div id="specials"></div>
+	<div id="specialsWebsite"></div>
+	<div id="specials1"></div>
+	<div id="specials1Website"></div>
+	
+	<!-- <div id="specialsKoordinaten"></div>
+	-->
+	
+	
+	
+	
+	<h4>Quelle: </h4>
+	<div id="Quelle"></div>
+	
+
+	
+   
+   
+
+
+ <p class="author"><a href="https://llenainnsbruck.github.io/adlerweg/index.html">Hier </a> der Link zur Seite der Autoren Tabea Hengst, Matthias von Stackelberg, Lena Grüb</p>
+	
+
+    <script>
+//das skript ist in getrennter Datei "map.js" gespeichert
+    </script>
+
+</body>
+
+</html>
